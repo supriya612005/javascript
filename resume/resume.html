@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Resume</title>
+    <link rel="stylesheet" href="resume.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="name"></h1>
+            <h2 id="jobTitle"></h2>
+        </div>
+        <div id="resume-display" class="resume-display"></div>
+        <button id="download-btn" class="download-btn">Download Resume</button>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        const name = localStorage.getItem('name');
+        const email = localStorage.getItem('email');
+        const phone = localStorage.getItem('phone');
+        const address = localStorage.getItem('address');
+        const jobTitle = localStorage.getItem('jobTitle');
+        const experience = localStorage.getItem('experience');
+        const skills = JSON.parse(localStorage.getItem('skills'));
+        const projects = localStorage.getItem('projects');
+        const education = JSON.parse(localStorage.getItem('education'));
+
+        document.getElementById('name').textContent = name;
+        document.getElementById('jobTitle').textContent = jobTitle;
+
+        let skillsHTML = '';
+        skills.forEach(skill => {
+            skillsHTML += `
+                <div class="skill">
+                    <div class="circle" style="background: conic-gradient(#28a745 0% ${skill.percentage}%, #ccc ${skill.percentage}% 100%);">
+                        <div class="inside-circle">${skill.percentage}%</div>
+                    </div>
+                    <p>${skill.name}</p>
+                </div>
+            `;
+        });
+
+        let educationHTML = '';
+        education.forEach(entry => {
+            educationHTML += `
+                <div class="education-entry">
+                    <h4>${entry.degree}</h4>
+                    <p>${entry.institution}</p>
+                    <p>${entry.year}</p>
+                </div>
+            `;
+        });
+
+        const resumeHTML = `
+            <div class="left-column">
+                <div class="section">
+                    <h3>Personal Information</h3>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Phone:</strong> ${phone}</p>
+                    <p><strong>Address:</strong> ${address}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Skills</h3>
+                    <div class="skills-container">
+                        ${skillsHTML}
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="section">
+                    <h3>Education</h3>
+                    <div class="education-container">
+                        ${educationHTML}
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Work Experience</h3>
+                    <p>${experience}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Projects</h3>
+                    <p>${projects}</p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('resume-display').innerHTML = resumeHTML;
+
+        document.getElementById('download-btn').addEventListener('click', () => {
+            html2canvas(document.getElementById('resume-display')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('resume.pdf');
+            });
+        });
+    </script>
+</body>
+</html>

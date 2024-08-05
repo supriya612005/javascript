@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Maker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Resume Maker</h1>
+        <form id="resume-form">
+            <h2>Personal Information</h2>
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="jobTitle">Job Title:</label>
+            <input type="text" id="jobTitle" name="jobTitle" required>
+
+            <h2>Education</h2>
+            <div id="education-container">
+                <div class="education-input">
+                    <input type="text" name="education-degree" placeholder="Degree/Certification" required>
+                    <input type="text" name="education-institution" placeholder="Institution" required>
+                    <input type="text" name="education-year" placeholder="Year" required>
+                </div>
+            </div>
+            <button type="button" id="add-education">Add Another Education</button>
+
+            <h2>Work Experience</h2>
+            <label for="experience">Work Experience:</label>
+            <textarea id="experience" name="experience" rows="4" required></textarea>
+
+            <h2>Skills</h2>
+            <div id="skills-container">
+                <div class="skill-input">
+                    <input type="text" name="skill-name" placeholder="Skill Name" required>
+                    <input type="number" name="skill-percentage" placeholder="Percentage" min="0" max="100" required>
+                </div>
+            </div>
+            <button type="button" id="add-skill">Add Another Skill</button>
+
+            <h2>Projects</h2>
+            <label for="projects">Projects:</label>
+            <textarea id="projects" name="projects" rows="4" required></textarea>
+
+            <button type="submit">Generate Resume</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
